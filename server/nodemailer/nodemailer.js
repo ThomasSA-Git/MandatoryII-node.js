@@ -35,7 +35,11 @@ export async function sendFakeEmail(userEmail, subject, message) {
   };
 
   export const contactMailSubject = "Message sent."
-  export const contactMailMessage = "Your message has been submitted."
+  //export const contactMailMessage = "Your message has been submitted."
+
+  export function contactMailMessage(message){
+    return `You have submitted the follow message: ${message}`;
+  }
 
   export const registerMailSubject = "Registration"
   export function registerMailMessage(username){

@@ -24,6 +24,7 @@
           "Content-Type": "application/json",
         },
         body: JSON.stringify(contactData),
+        credentials: "include"
       });
 
       if (response.ok) {
@@ -72,20 +73,13 @@
 
 <form on:submit|preventDefault={handleSubmit}>
   <label for="name">Your name:</label>
-  <input name="name" placeholder="Your name" value="some name" />
-
+  <input bind:value={name} name="name" placeholder="Your name" />
+  
   <label for="email">Your Email:</label>
-  <input
-    type="email"
-    name="email"
-    placeholder="Your email"
-    value="someemail@mail.dk"
-  />
-
+  <input bind:value={email} type="email" name="email" placeholder="Your email" />
+  
   <label for="message">Message:</label>
-  <textarea name="message" cols="80" rows="10" placeholder="Message"
-    >Some text</textarea
-  >
+  <textarea bind:value={message} name="message" cols="80" rows="10" placeholder="Message"></textarea>
 
   <button type="submit">Submit</button>
 </form>

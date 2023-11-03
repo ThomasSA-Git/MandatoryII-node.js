@@ -14,7 +14,7 @@ import bodyParser from "body-parser";
 router.use(bodyParser.urlencoded({ extended: true }));
 
 // Mongo db imports
-import { createUser, findUserByUsername, findAllUsers } from '../db/mongoDb.js';
+import { createUser, findUserByUsername } from '../db/mongoDb.js';
 
 import {
   registerMailSubject,
@@ -66,7 +66,8 @@ router.post("/auth/register", async (req, res) => {
     // Create user in mongodb
     createUser(username, email, hashedPassword);
 
-    sendFakeEmail(email, registerMailSubject, registerMailMessage);
+    const mailMessage = registerMailMessage(username);
+    sendFakeEmail(email, registerMailSubject, mailMessage);
 
     // Message not necessary
     res.json({ message: "Registration successful." });

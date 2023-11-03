@@ -1,7 +1,8 @@
 import { Router } from "express";
 const router = Router();
 
-import { users } from "../db/tempdb.js";
+// Mongo db imports
+import { findAllUsers } from '../db/mongoDb.js';
 
 export function isAuthenticated(req, res, next) {
     if (req.session && req.session.user && req.session.user.role === "admin") {
@@ -11,7 +12,8 @@ export function isAuthenticated(req, res, next) {
     }
   }
 
-router.get("/admin/getMembers", isAuthenticated, (req, res) => {
+router.get("/admin/getMembers", isAuthenticated, async (req, res) => {
+    const users = await findAllUsers();
     res.send({ data: users });
 });
 
