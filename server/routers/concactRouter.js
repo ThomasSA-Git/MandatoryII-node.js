@@ -2,7 +2,7 @@ import { Router } from "express";
 
 const router = Router();
 
-import { contactMailSubject, contactMailMessage, sendFakeEmail } from "../nodemailer/nodemailer";
+import { contactMailSubject, contactMailMessage, sendFakeEmail } from "../nodemailer/nodemailer.js";
 
 router.post("/contact", (req, res) => {
     const contactData = req.body;
@@ -13,3 +13,5 @@ router.post("/contact", (req, res) => {
 
     // some response here
 });
+
+export default router;

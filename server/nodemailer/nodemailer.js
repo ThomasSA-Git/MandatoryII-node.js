@@ -4,8 +4,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-import nodemailer from 'nodemailer';
-
 export async function sendFakeEmail(userEmail, subject, message) {
     // Create a test account using Ethereal
     const testAccount = await nodemailer.createTestAccount();

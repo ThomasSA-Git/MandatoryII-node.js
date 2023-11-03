@@ -1,17 +1,20 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 import express, { urlencoded } from "express";
 
 const app = express();
 
 import cors from "cors";
 
-import { corsOptions } from "./util/cors.js";
-
 // add cors options here
-app.use(cors());
-
-import dotenv from "dotenv";
-
-dotenv.config();
+app.use(
+  cors({
+    credentials: true,
+    origin: true,
+  })
+);
 
 app.use(urlencoded({ extended: false }));
 
@@ -19,35 +22,54 @@ import rateLimit from "express-rate-limit";
 
 app.use(express.json());
 
+import session from "express-session";
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false, //wont resave if there aren't any changes in session. Should be false.
+    saveUninitialized: true, //if there isnt any session, should there be saved if client calls backed
+    cookie: { secure: false }, //true if running on https. Should be set to true when deployed
+  })
+);
 
 const allRoutesRateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 200, // Limit each IP to 200 requests per `window` (here, per 15 minutes).
-    standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-    // store: ... , // Use an external store for consistency across multiple server instances.
-  });
-  
-  app.use(allRoutesRateLimiter);
-  
-  // Rate limiter specific for login. Overrides the above for the specific path as set below.
-  const authRateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 5, // Limit each IP to 5 requests per `window` (here, per 15 minutes).
-    standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-    // store: ... , // Use an external store for consistency across multiple server instances.
-  });
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 200, // Limit each IP to 200 requests per `window` (here, per 15 minutes).
+  standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+  // store: ... , // Use an external store for consistency across multiple server instances.
+});
 
-  import authRouter from "./routers/authRouter.js";
-  app.use(authRouter);
+app.use(allRoutesRateLimiter);
 
-  import contactRouter from "./routers/concactRouter.js"
-  app.use(contactRouter);
+// Rate limiter specific for login. Overrides the above for the specific path as set below.
+const authRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 5, // Limit each IP to 5 requests per `window` (here, per 15 minutes).
+  standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+  // store: ... , // Use an external store for consistency across multiple server instances.
+});
 
-  import memberRouter from "./routers/MemberRouter.js";
-  app.use(memberRouter);
+// Router import
+import authRouter from "./routers/authRouter.js";
+app.use(authRouter);
+app.use("/auth", authRateLimiter);
 
-  const PORT = process.env.PORT || 8080;
+import contactRouter from "./routers/concactRouter.js";
+app.use(contactRouter);
 
-  app.listen(PORT, () => console.log("Running on port:", PORT));
+import memberRouter from "./routers/MemberRouter.js";
+app.use(memberRouter);
+
+import adminRouter from "./routers/adminRouter.js";
+app.use(adminRouter);
+
+// Used for creating an admin user on start up
+/*   import { createAdminUser } from "./db/mongoDb.js";
+  await createAdminUser(); */
+
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => console.log("Running on port:", PORT));

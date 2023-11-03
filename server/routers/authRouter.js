@@ -1,66 +1,82 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 import { Router } from "express";
+//destructuring import
 
 const router = Router();
 
-import { createUser, findUserByUsername } from "../db/db.js";
-
-import { hashPassword, comparePasswords } from "../util/bcrypt.js"
+import { hashPassword, comparePasswords } from "../util/bcrypt.js";
 
 import bodyParser from "body-parser";
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
-import session from "express-session";
+// Mongo db imports
+import { createUser, findUserByUsername, findAllUsers } from '../db/mongoDb.js';
 
-/* router.use(
-  session({
-    secret: process.env.SESSIONSECRET,
-    resave: false,
-    saveUninitialized: true,
-  })
-); */
+import {
+  registerMailSubject,
+  registerMailMessage,
+  sendFakeEmail,
+} from "../nodemailer/nodemailer.js";
 
-import dotenv from "dotenv";
+router.post("/auth/login", async (req, res) => {
+  const { username, password } = req.body;
 
-dotenv.config();
+  // Find user in database
+  const user = await findUserByUsername(username);
 
-import { registerMailSubject, registerMailMessage, sendFakeEmail } from "../nodemailer/nodemailer";
+  if (user) {
+    // Compare the provided password with the hashed password in the database
+    const match = await comparePasswords(password, user.password);
 
-router.post('/auth/login', async (req, res) => {
-    const { username, password } = req.body;
-  
-    // Find the user in the database
-    const user = await findUserByUsername(username);
-  
-    if (user) {
-      // Compare the provided password with the hashed password in the database
-      const match = await comparePasswords(password, user.password);
-  
-      if (match) {
-        // Store user information in the session
-        req.session.user = user;
-        res.redirect('/');
-      } else {
-        res.send('Invalid username or password');
-      }
+    if (match) {
+      // Store user information in the session
+      req.session.user = user;
+      console.log("Login succesful.");
+      res.json({
+        username: req.session.user.username,
+        role: req.session.user.role,
+      });
     } else {
-      res.send('Invalid username');
+      // Send a 401 status for incorrect password
+      res.status(401).json({ error: "Invalid password." });
     }
-  });
-  
+  } else {
+    // Send a 401 status for invalid username
+    res.status(401).json({ error: "Invalid username." });
+  }
+});
 
-  router.post('/auth/register', async (req, res) => {
-    const { username, email, password } = req.body;
-    // Hash the password
-    const hashedPassword = await hashPassword(password);
-    console.log(username);
-    // Create a new user in the database
-    await createUser(username, email, hashedPassword);
-    
+router.post("/auth/register", async (req, res) => {
+  const { username, email, password } = req.body;
+
+  // Hash the password
+  const hashedPassword = await hashPassword(password);
+
+  // check if username exists
+  const userExists = await findUserByUsername(username);
+  console.log(userExists);
+  if (userExists) {
+    console.log("Username is taken.");
+    res.status(401).json({ error: "Username is taken" });
+  } else {
+    // Create user in mongodb
+    createUser(username, email, hashedPassword);
+
     sendFakeEmail(email, registerMailSubject, registerMailMessage);
 
-    // Consider where to redirect to
-    res.redirect('/');
-  });
+    // Message not necessary
+    res.json({ message: "Registration successful." });
+  }
+});
+
+router.get("/auth/logout", (req, res) => {
+  delete req.session.user;
+  console.log("logged out");
+  res.send({ data: "You're logged out." });
+});
 
 export default router;

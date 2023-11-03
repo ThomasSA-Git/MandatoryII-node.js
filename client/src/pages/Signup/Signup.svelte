@@ -24,6 +24,7 @@
             "Content-Type": "application/json",
           },
           body: JSON.stringify(userData),
+          credentials: "include"
         });
   
         if (response.ok) {
@@ -36,20 +37,23 @@
             timeout,
           });
           username = "";
+          email = "";
           password = "";
         } else {
           // Handle failed registration
           const errorData = await response.json();
-          // make the below a toast instead
-          const errorMessage =
-            errorData.message || "Registration failed. Please try again later.";
-          addToast({ errorMessage, type: "error", dismissible, timeout });
+    
+        // make the below a toast instead
+        const errorMessage =
+          errorData.error || "Login failed. Please check your credentials.";
+          addToast({ message: errorMessage, type: "error", dismissible, timeout });
           username = "";
+          email = "";
           password = "";
         }
       } catch (error) {
         // make toast for the below as well
-        console.error("Login error:", error);
+        //console.error("Login error:", error);
         addToast({
           message: "An unexpected error occurred. Please try again later.",
           type: "error",

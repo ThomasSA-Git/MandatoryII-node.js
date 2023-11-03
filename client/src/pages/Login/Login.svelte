@@ -1,19 +1,19 @@
 <script>
   import Toasts from "../../components/toast/Toasts.svelte";
-  import { addToast } from "../../components/stores.js";
+  import { addToast, user, role } from "../../components/stores.js";
   import { url } from "../../util/apiUrl";
+  import { navigate } from "svelte-navigator";
 
   let dismissible = true;
   let timeout = 0;
 
   let username = "";
   let password = "";
-  let errorMessage = "";
 
   async function handleSubmit() {
     const loginData = {
       username,
-      password
+      password,
     };
 
     try {
@@ -23,34 +23,41 @@
           "Content-Type": "application/json",
         },
         body: JSON.stringify(loginData),
+        credentials: "include",
       });
 
       if (response.ok) {
         // Handle successful login
-        // Make a toast and redirect after countdown
+        const userData = await response.json();
+        $user = userData.username;
+        $role = userData.role;
+        // Redirect depending on role
+        if ($role === "admin") {
+          navigate("/adminpage");
+        } else {
+          navigate("/memberpage");
+        }
+      } else {
+        // Handle failed login
+        const errorData = await response.json();
+        // make the below a toast instead
+        const errorMessage =
+          errorData.error || "Login failed. Please check your credentials.";
+        console.log(errorMessage);
         addToast({
-          message: "Login successful",
-          type: "success",
+          message: errorMessage,
+          type: "error",
           dismissible,
           timeout,
         });
         username = "";
         password = "";
-      } else {
-        // Handle failed login
-        const errorData = await response.json();
-        // make the below a toast instead
-        errorMessage =
-          errorData.message || "Login failed. Please check your credentials.";
-        addToast({ errorMessage, type: "error", dismissible, timeout });
-        username = "";
-        password = "";
       }
     } catch (error) {
+      console.log(error);
       // make toast for the below as well
-      console.error("Login error:", error);
       addToast({
-        message: "An unexpected error occurred. Please try again later.",
+        message: error,
         type: "error",
         dismissible,
         timeout,
