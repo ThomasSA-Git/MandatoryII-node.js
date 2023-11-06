@@ -21,11 +21,10 @@
 
       if (response.ok) {
         const memberData = await response.json();
-        console.log(memberData);
+        console.log("Member Data:", memberData);
         streetname = memberData.user.address?.streetname || "";
         cityname = memberData.user.address?.cityname || "";
         zipcode = memberData.user.address?.zipcode || "";
-        console.log(zipcode);
       } else {
         const errorData = await response.json();
         const errorMessage = errorData.error || "Failed to fetch member data.";

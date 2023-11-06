@@ -136,12 +136,16 @@ const addToResetPassword = async (username, secretToken) => {
     const db = client.db("Mandatory");
     const collection = db.collection("resetPassword");
 
-    // Set a TTL with a lifetime of 30 minutes (1800 seconds)
     const resetPasswordEntry = {
       username,
       secretToken,
-      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 30 * 60 * 1000),
     };
+
+    // Ensure an index on the 'expiresAt' field for TTL
+    await collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
+
 
     const result = await collection.insertOne(resetPasswordEntry, {
       expireAfterSeconds: 1800,

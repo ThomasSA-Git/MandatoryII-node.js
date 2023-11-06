@@ -21,6 +21,8 @@ import {
   sendFakeEmail
 } from "../nodemailer/nodemailer.js";
 
+import { createUserDTO } from "../dto/userDTO.js";
+
 function isAuthenticated(req, res, next) {
   if (req.session && req.session.user) {
     return next();
@@ -31,12 +33,14 @@ function isAuthenticated(req, res, next) {
 
 router.get("/member/getMember/:username", isAuthenticated, async (req, res) => {
   try {
+    // finduser in db
     const username = req.params.username;
-    console.log(username)
     const user = await findUserByUsername(username);
 
     if (user) {
-      res.status(200).json({ user });
+      // create dto for response
+      const userDTO = createUserDTO(user);
+      res.status(200).json({ user: userDTO });
     } else {
       res.status(404).json({ error: "User not found" });
     }
@@ -48,8 +52,8 @@ router.get("/member/getMember/:username", isAuthenticated, async (req, res) => {
 
 router.post("/member/updateAddress", isAuthenticated, async (req, res) => {
   try{
+    
     const { username, address} = req.body;
-
     const success = await updateUserAddress(username, address);
     if(success){
     res.status(200).json({ message: 'Address succesfully updated.' });
