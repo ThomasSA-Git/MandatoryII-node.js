@@ -9,12 +9,32 @@
   import PrivateRoute from "./components/RouteProtection/PrivateRoute.svelte";
   import { user, role } from "./components/stores.js";
   import { url } from "./util/apiUrl";
+  import ResetPassword from "./pages/ResetPassword/ResetPassword.svelte";
+
+  import { onMount } from 'svelte';
+
+
+onMount(() => {
+  // Check for user in localStorage
+  const storedUser = localStorage.getItem('user');
+  if (storedUser) {
+    const userData = JSON.parse(storedUser);
+    user.set(userData.username);
+    role.set(userData.role);
+  }
+});
+
+   let showDropdown = false;
 
   async function handleLogout() {
       await fetch(url + "auth/logout", {
         credentials: "include",
       });
     $user = null;
+  }
+
+  function toggleDropdown() {
+    showDropdown = !showDropdown;
   }
 </script>
 
@@ -23,9 +43,14 @@
     <Link to="/">Home</Link>
 
     {#if $user == null}
-      <Link to="/login">Login</Link>
-
-      <Link to="/signup">Signup</Link>
+      <div class="dropdown" on:click={toggleDropdown}>
+        <span>Login options</span>
+        <div class="dropdown-content">
+          <Link to="/login">Login</Link><br />
+          <Link to="/signup">Signup</Link><br />
+          <Link to="/resetpassword">Reset password</Link>
+        </div>
+      </div>
     {/if}
 
     <Link to="/contact">Contact</Link>
@@ -45,6 +70,7 @@
     <Route path="/"><Home /></Route>
     <Route path="/login"><Login /></Route>
     <Route path="/signup"><Signup /></Route>
+    <Route path="/resetpassword"><ResetPassword /></Route>
     <Route path="/contact"><Contact /></Route>
     <PrivateRoute path="/memberpage" let:location>
       <Member />

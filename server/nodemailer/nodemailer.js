@@ -45,3 +45,8 @@ export async function sendFakeEmail(userEmail, subject, message) {
   export function registerMailMessage(username){
     return `You have succesfully been registered with the username: ${username}`;
   };
+
+  export const passwordResetSubject = "Password reset";
+  export function passwordResetMessage(username, token){
+    return `You have requested to reset your password for ${username}. Use this token ${token} for reset on webpage.`
+  }

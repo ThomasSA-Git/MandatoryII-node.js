@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-import express, { urlencoded } from "express";
+import express from "express";
 
 const app = express();
 
@@ -16,7 +16,6 @@ app.use(
   })
 );
 
-app.use(urlencoded({ extended: false }));
 
 import rateLimit from "express-rate-limit";
 

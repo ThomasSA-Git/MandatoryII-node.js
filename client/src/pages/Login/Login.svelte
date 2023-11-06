@@ -31,6 +31,7 @@
         const userData = await response.json();
         $user = userData.username;
         $role = userData.role;
+        localStorage.setItem('user', JSON.stringify(userData));
         // Redirect depending on role
         if ($role === "admin") {
           navigate("/adminpage");
@@ -52,6 +53,7 @@
         });
         username = "";
         password = "";
+        
       }
     } catch (error) {
       console.log(error);
@@ -65,6 +67,10 @@
       username = "";
       password = "";
     }
+  }
+
+  function navigateToResetPassword() {
+    navigate("/resetpassword");
   }
 </script>
 
@@ -81,3 +87,4 @@
 
   <button type="submit">Login</button>
 </form>
+<button on:click={navigateToResetPassword}>Forgot Password?</button>

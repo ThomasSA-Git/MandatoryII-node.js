@@ -11,6 +11,7 @@
       });
         const result = await response.json();
         members = result.data;
+        console.log(members[0])
     });
 </script>
 
@@ -22,5 +23,10 @@
     <p><strong>Username: </strong>{member.username}</p>
     <p><strong>Email: </strong>{member.email}</p>
     <p><strong>Role: </strong>{member.role}</p>
+    {#if member.address != undefined}
+    <p><strong>Street: </strong>{member.address.streetname}</p>
+    <p><strong>Email: </strong>{member.address.cityname}</p>
+    <p><strong>Role: </strong>{member.address.zipcode}</p>
+    {/if}
     <br>
 {/each}

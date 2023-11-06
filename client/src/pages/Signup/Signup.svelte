@@ -2,6 +2,7 @@
     import Toasts from "../../components/toast/Toasts.svelte";
     import { addToast } from "../../components/stores.js";
     import { url } from "../../util/apiUrl";
+    import { navigate } from "svelte-navigator";
   
     let dismissible = true;
     let timeout = 0;
@@ -28,10 +29,11 @@
         });
   
         if (response.ok) {
-          // Handle successful logiregistration
-          // Make a toast and redirect after countdown
+          
+          const registrationMessage = await response.json();
+
           addToast({
-            message: "Registration successful",
+            message: registrationMessage.message,
             type: "success",
             dismissible,
             timeout,
@@ -39,6 +41,9 @@
           username = "";
           email = "";
           password = "";
+          setTimeout(() => {
+          navigate("/login");
+        }, 3000);
         } else {
           // Handle failed registration
           const errorData = await response.json();

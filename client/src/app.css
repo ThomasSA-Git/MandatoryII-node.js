@@ -106,7 +106,6 @@ form {
   align-items: center;
   justify-content: center;
   margin: 0;
-  margin-top: 50px;
   padding: 20px;
 }
 
@@ -121,5 +120,40 @@ button {
 }
 
 button:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #45a049;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  position: absolute;
+  width: 130px;
+  background-color: #333;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  display: none;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Adjust as needed */
+}
+
+.column {
+  flex: 1; /* Adjust the width as needed */
+  margin: 8px; /* Adjust margin between columns */
+}
+
+/* Optional: Add a border to visualize columns */
+.column {
+  border: 1px solid #ccc;
+  padding: 16px;
 }

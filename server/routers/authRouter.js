@@ -9,9 +9,6 @@ const router = Router();
 
 import { hashPassword, comparePasswords } from "../util/bcrypt.js";
 
-import bodyParser from "body-parser";
-
-router.use(bodyParser.urlencoded({ extended: true }));
 
 // Mongo db imports
 import { createUser, findUserByUsername } from '../db/mongoDb.js';
@@ -29,16 +26,17 @@ router.post("/auth/login", async (req, res) => {
   const user = await findUserByUsername(username);
 
   if (user) {
-    // Compare the provided password with the hashed password in the database
+    // Cmpare the provided password with the hashed password in the database
     const match = await comparePasswords(password, user.password);
 
     if (match) {
       // Store user information in the session
       req.session.user = user;
       console.log("Login succesful.");
+      // Send username and role to use for auth clientside.
       res.json({
         username: req.session.user.username,
-        role: req.session.user.role,
+        role: req.session.user.role
       });
     } else {
       // Send a 401 status for incorrect password
@@ -66,6 +64,7 @@ router.post("/auth/register", async (req, res) => {
     // Create user in mongodb
     createUser(username, email, hashedPassword);
 
+    // Send mail confirming registration
     const mailMessage = registerMailMessage(username);
     sendFakeEmail(email, registerMailSubject, mailMessage);
 
