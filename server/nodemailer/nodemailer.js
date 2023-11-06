@@ -1,14 +1,13 @@
 import nodemailer from "nodemailer";
 
-import dotenv from "dotenv";
+/* import dotenv from "dotenv"; */
 
-dotenv.config();
 
 export async function sendFakeEmail(userEmail, subject, message) {
-    // Create a test account using Ethereal
+    // Create a test account using ehereal
     const testAccount = await nodemailer.createTestAccount();
   
-    // Create a transporter object using the test account
+    // Create a transporter object
     const transporter = nodemailer.createTransport({
       host: 'smtp.ethereal.email',
       port: 587,
@@ -48,5 +47,5 @@ export async function sendFakeEmail(userEmail, subject, message) {
 
   export const passwordResetSubject = "Password reset";
   export function passwordResetMessage(username, token){
-    return `You have requested to reset your password for ${username}. Use this token ${token} for reset on webpage.`
+    return `You have requested to reset your password for ${username}. Use this token ${token} for reset on webpage. The token expires after 30 minutes.`
   }

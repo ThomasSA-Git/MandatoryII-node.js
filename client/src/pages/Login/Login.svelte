@@ -32,12 +32,21 @@
         $user = userData.username;
         $role = userData.role;
         localStorage.setItem('user', JSON.stringify(userData));
+
+        addToast({
+          message: "Login successful. Redirecting.",
+          type: "success",
+          dismissible,
+          timeout,
+        });
         // Redirect depending on role
+        setTimeout(() => {
         if ($role === "admin") {
           navigate("/adminpage");
         } else {
           navigate("/memberpage");
         }
+      }, 2000);
       } else {
         // Handle failed login
         const errorData = await response.json();

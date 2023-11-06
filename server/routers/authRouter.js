@@ -3,21 +3,21 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { Router } from "express";
-//destructuring import
 
 const router = Router();
 
 import { hashPassword, comparePasswords } from "../util/bcrypt.js";
 
-
 // Mongo db imports
-import { createUser, findUserByUsername } from '../db/mongoDb.js';
+import { createUser, findUserByUsername } from "../db/mongoDb.js";
 
 import {
   registerMailSubject,
   registerMailMessage,
   sendFakeEmail,
 } from "../nodemailer/nodemailer.js";
+
+import { purify } from "../util/DOMpurify.js";
 
 router.post("/auth/login", async (req, res) => {
   const { username, password } = req.body;
@@ -36,7 +36,7 @@ router.post("/auth/login", async (req, res) => {
       // Send username and role to use for auth clientside.
       res.json({
         username: req.session.user.username,
-        role: req.session.user.role
+        role: req.session.user.role,
       });
     } else {
       // Send a 401 status for incorrect password
@@ -51,18 +51,21 @@ router.post("/auth/login", async (req, res) => {
 router.post("/auth/register", async (req, res) => {
   const { username, email, password } = req.body;
 
+  // purify relevant input
+  const purifiedUsername = purify(username);
+  const purifiedEmail = purify(username);
   // Hash the password
   const hashedPassword = await hashPassword(password);
 
   // check if username exists
   const userExists = await findUserByUsername(username);
-  console.log(userExists);
+  
   if (userExists) {
     console.log("Username is taken.");
     res.status(401).json({ error: "Username is taken" });
   } else {
     // Create user in mongodb
-    createUser(username, email, hashedPassword);
+    createUser(purifiedUsername, purifiedEmail, hashedPassword);
 
     // Send mail confirming registration
     const mailMessage = registerMailMessage(username);
@@ -74,8 +77,9 @@ router.post("/auth/register", async (req, res) => {
 });
 
 router.get("/auth/logout", (req, res) => {
+  // delete session
   delete req.session.user;
-  console.log("logged out");
+  // maybe delete below, not necessary
   res.send({ data: "You're logged out." });
 });
 

@@ -57,8 +57,6 @@
           password = "";
         }
       } catch (error) {
-        // make toast for the below as well
-        //console.error("Login error:", error);
         addToast({
           message: "An unexpected error occurred. Please try again later.",
           type: "error",
@@ -66,6 +64,7 @@
           timeout,
         });
         username = "";
+        email = "";
         password = "";
       }
     }

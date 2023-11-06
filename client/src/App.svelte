@@ -31,6 +31,7 @@ onMount(() => {
         credentials: "include",
       });
     $user = null;
+    localStorage.clear();
   }
 
   function toggleDropdown() {

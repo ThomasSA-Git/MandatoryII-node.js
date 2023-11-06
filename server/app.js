@@ -8,7 +8,7 @@ const app = express();
 
 import cors from "cors";
 
-// add cors options here
+// cors, can be set up with options for specific url.
 app.use(
   cors({
     credentials: true,
@@ -37,7 +37,6 @@ const allRoutesRateLimiter = rateLimit({
   limit: 200, // Limit each IP to 200 requests per `window` (here, per 15 minutes).
   standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-  // store: ... , // Use an external store for consistency across multiple server instances.
 });
 
 app.use(allRoutesRateLimiter);
@@ -48,7 +47,6 @@ const authRateLimiter = rateLimit({
   limit: 5, // Limit each IP to 5 requests per `window` (here, per 15 minutes).
   standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-  // store: ... , // Use an external store for consistency across multiple server instances.
 });
 
 // Router import

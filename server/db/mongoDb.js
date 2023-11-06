@@ -78,7 +78,7 @@ const createAdminUser = async () => {
     const user = {
       username: "admin",
       email: "admin@admin",
-      password: "$2b$10$y1DuVu3DhYTXLSXjK2k2Mukv/AMdTd.W2lhWC38xMPd3A8ScoPyDy",
+      password: process.env.ADMIN_PASSWORD,
       role: "admin",
     };
 
