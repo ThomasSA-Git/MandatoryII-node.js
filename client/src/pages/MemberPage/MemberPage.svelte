@@ -15,7 +15,7 @@
 
   onMount(async () => {
     try {
-      const response = await fetch(`${url}member/getMember/${member}`, {
+      const response = await fetch(`${url}member/getMember`, {
         credentials: "include",
       });
 
