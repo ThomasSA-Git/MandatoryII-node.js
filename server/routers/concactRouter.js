@@ -9,7 +9,7 @@ import {
 } from "../nodemailer/nodemailer.js";
 
 // for contant message from cs
-router.post("/contact", (req, res) => {
+router.post("/api/contact", (req, res) => {
   const { name, email, message } = req.body;
 
   // Send mail confirming submission of contact form.

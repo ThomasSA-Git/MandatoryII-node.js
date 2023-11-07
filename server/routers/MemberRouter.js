@@ -21,7 +21,7 @@ import {
   sendFakeEmail,
 } from "../nodemailer/nodemailer.js";
 
-import { createUserDTO } from "../dto/userDTO.js";
+import { createUserResponse } from "../dto/userResponse.js";
 
 import { purify } from "../util/DOMpurify.js";
 
@@ -34,7 +34,7 @@ function isAuthenticated(req, res, next) {
 }
 
 // maybe use session instead of path variable..?
-router.get("/member/getMember/", isAuthenticated, async (req, res) => {
+router.get("/api/member/getMember/", isAuthenticated, async (req, res) => {
   try {
     // finduser in db
     const username = req.session.user.username;
@@ -42,8 +42,8 @@ router.get("/member/getMember/", isAuthenticated, async (req, res) => {
 
     if (user) {
       // create dto for response
-      const userDTO = createUserDTO(user);
-      res.status(200).json({ user: userDTO });
+      const userResponse = createUserResponse(user);
+      res.status(200).json({ user: userResponse });
     } else {
       res.status(404).json({ error: "User not found" });
     }
@@ -53,15 +53,15 @@ router.get("/member/getMember/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/member/updateAddress", isAuthenticated, async (req, res) => {
+router.post("/api/member/updateAddress", isAuthenticated, async (req, res) => {
   try {
     const { username, address } = req.body;
 
     const purifiedAddress = {
       streetname: purify(address.streetname),
       cityname: purify(address.cityname),
-      zipcode: purify(address.zipcode)
-    }
+      zipcode: purify(address.zipcode),
+    };
     // updates address of users in db
     const success = await updateUserAddress(username, purifiedAddress);
     if (success) {
@@ -75,7 +75,7 @@ router.post("/member/updateAddress", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/member/getSecretToken", async (req, res) => {
+router.post("/api/member/getSecretToken", async (req, res) => {
   try {
     const username = req.body.username;
     const userExists = await findUserByUsername(username);
@@ -108,7 +108,7 @@ router.post("/member/getSecretToken", async (req, res) => {
   }
 });
 
-router.post("/member/resetPassword", async (req, res) => {
+router.post("/api/member/resetPassword", async (req, res) => {
   try {
     const { username, secretToken, newPassword } = req.body;
 

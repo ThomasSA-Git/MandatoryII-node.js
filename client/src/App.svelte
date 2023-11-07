@@ -7,7 +7,7 @@
   import Member from "./pages/MemberPage/MemberPage.svelte";
   import Admin from "./pages/Admin/Admin.svelte";
   import PrivateRoute from "./components/RouteProtection/PrivateRoute.svelte";
-  import { user, role } from "./components/stores.js";
+  import { user, role } from "./store/stores.js";
   import { url } from "./util/apiUrl";
   import ResetPassword from "./pages/ResetPassword/ResetPassword.svelte";
 

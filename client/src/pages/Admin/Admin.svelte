@@ -1,8 +1,7 @@
 <script>
-  import { url } from "../../util/apiUrl";
   import { onMount } from "svelte";
   import Toasts from "../../components/toast/Toasts.svelte";
-  import { addToast } from "../../components/stores.js";
+  import { addToast, BASE_URL } from "../../store/stores.js";
 
   let members = [];
   let dismissible = true;
@@ -10,7 +9,7 @@
 
   onMount(async () => {
     try {
-      const response = await fetch(url + "admin/getMembers", {
+      const response = await fetch($BASE_URL + "/admin/getMembers", {
         credentials: "include",
       });
 

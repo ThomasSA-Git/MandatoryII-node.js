@@ -1,7 +1,6 @@
 <script>
   import Toasts from "../../components/toast/Toasts.svelte";
-  import { addToast, user, role } from "../../components/stores.js";
-  import { url } from "../../util/apiUrl";
+  import { addToast, user, role, BASE_URL } from "../../store/stores.js";
   import { navigate } from "svelte-navigator";
 
   let dismissible = true;
@@ -17,7 +16,7 @@
     };
 
     try {
-      const response = await fetch(url + "auth/login", {
+      const response = await fetch($BASE_URL + "/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,7 +30,7 @@
         const userData = await response.json();
         $user = userData.username;
         $role = userData.role;
-        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem("user", JSON.stringify(userData));
 
         addToast({
           message: "Login successful. Redirecting.",
@@ -41,12 +40,12 @@
         });
         // Redirect depending on role
         setTimeout(() => {
-        if ($role === "admin") {
-          navigate("/adminpage");
-        } else {
-          navigate("/memberpage");
-        }
-      }, 2000);
+          if ($role === "admin") {
+            navigate("/adminpage");
+          } else {
+            navigate("/memberpage");
+          }
+        }, 2000);
       } else {
         // Handle failed login
         const errorData = await response.json();
@@ -62,7 +61,6 @@
         });
         username = "";
         password = "";
-        
       }
     } catch (error) {
       console.log(error);

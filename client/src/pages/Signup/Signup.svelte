@@ -1,7 +1,6 @@
 <script>
     import Toasts from "../../components/toast/Toasts.svelte";
-    import { addToast } from "../../components/stores.js";
-    import { url } from "../../util/apiUrl";
+    import { addToast, BASE_URL } from "../../store/stores.js";
     import { navigate } from "svelte-navigator";
   
     let dismissible = true;
@@ -19,7 +18,7 @@
       };
   
       try {
-        const response = await fetch(url + "auth/register", {
+        const response = await fetch($BASE_URL + "/auth/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

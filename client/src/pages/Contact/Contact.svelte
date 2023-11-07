@@ -1,7 +1,6 @@
 <script>
   import Toasts from "../../components/toast/Toasts.svelte";
-  import { addToast } from "../../components/stores.js";
-  import { url } from "../../util/apiUrl";
+  import { addToast, BASE_URL } from "../../store/stores.js";
 
   let dismissible = true;
   let timeout = 0;
@@ -18,7 +17,7 @@
     };
 
     try {
-      const response = await fetch(url + "contact", {
+      const response = await fetch($BASE_URL + "/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -19,7 +19,7 @@ import {
 
 import { purify } from "../util/DOMpurify.js";
 
-router.post("/auth/login", async (req, res) => {
+router.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
   // Find user in database
@@ -48,7 +48,7 @@ router.post("/auth/login", async (req, res) => {
   }
 });
 
-router.post("/auth/register", async (req, res) => {
+router.post("/api/auth/register", async (req, res) => {
   const { username, email, password } = req.body;
 
   // purify relevant input
@@ -76,7 +76,7 @@ router.post("/auth/register", async (req, res) => {
   }
 });
 
-router.get("/auth/logout", (req, res) => {
+router.get("/api/auth/logout", (req, res) => {
   // delete session
   delete req.session.user;
   // maybe delete below, not necessary

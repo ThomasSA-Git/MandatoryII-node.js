@@ -1,7 +1,6 @@
 <script>
   import Toasts from "../../components/toast/Toasts.svelte";
-  import { addToast } from "../../components/stores.js";
-  import { url } from "../../util/apiUrl";
+  import { addToast, BASE_URL } from "../../store/stores.js";
   import { navigate } from "svelte-navigator";
 
   let dismissible = true;
@@ -15,7 +14,7 @@
 
   async function handleGetSecretToken() {
     try {
-      const response = await fetch(url + "member/getSecretToken", {
+      const response = await fetch($BASE_URL + "/member/getSecretToken", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +67,7 @@
     };
 
     try {
-      const response = await fetch(url + "member/resetPassword", {
+      const response = await fetch($BASE_URL + "/member/resetPassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

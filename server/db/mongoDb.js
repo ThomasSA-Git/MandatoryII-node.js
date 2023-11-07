@@ -46,7 +46,6 @@ const findUserByUsername = async (username) => {
     const collection = db.collection("users");
 
     const result = await collection.findOne({ username });
-    console.log("User found:", result);
     return result;
   } catch (err) {
     console.error("Error occurred while finding user", err);
@@ -61,7 +60,6 @@ const findAllUsers = async () => {
     const collection = db.collection("users");
 
     const result = await collection.find().toArray();
-    console.log("All users:", result);
     return result;
   } catch (err) {
     console.error("Error occurred while finding all users", err);
@@ -122,7 +120,6 @@ const findUserInResetPassword = async (username) => {
     const collection = db.collection("resetPassword");
 
     const result = await collection.findOne({ username });
-    console.log("User found in resetPassword:", result);
     return result;
   } catch (err) {
     console.error("Error occurred while finding user in resetPassword", err);

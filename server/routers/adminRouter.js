@@ -4,7 +4,7 @@ const router = Router();
 // Mongo db imports
 import { findAllUsers } from "../db/mongoDb.js";
 
-import { mapDTO } from "../dto/userDTO.js";
+import { mapResponse } from "../dto/userResponse.js";
 
 export function isAuthenticated(req, res, next) {
   if (req.session && req.session.user && req.session.user.role === "admin") {
@@ -14,7 +14,7 @@ export function isAuthenticated(req, res, next) {
   }
 }
 
-router.get("/admin/getMembers", isAuthenticated, async (req, res) => {
+router.get("/api/admin/getMembers", isAuthenticated, async (req, res) => {
   try {
     const users = await findAllUsers();
 
@@ -23,8 +23,8 @@ router.get("/admin/getMembers", isAuthenticated, async (req, res) => {
       return res.status(404).json({ error: "No users found" });
     }
     // create dto array to send. Ensures password isnt sent to frontend
-    const usersDTO = mapDTO(users);
-    res.status(200).json({ data: usersDTO });
+    const usersResponse = mapResponse(users);
+    res.status(200).json({ data: usersResponse });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "Internal server error" });

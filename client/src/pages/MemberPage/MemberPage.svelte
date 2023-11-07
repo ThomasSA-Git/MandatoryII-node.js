@@ -1,7 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { addToast, user } from "../../components/stores.js";
-  import { url } from "../../util/apiUrl";
+  import { addToast, user, BASE_URL } from "../../store/stores.js";
   import Toasts from "../../components/toast/Toasts.svelte";
 
   let dismissible = true;
@@ -15,7 +14,7 @@
 
   onMount(async () => {
     try {
-      const response = await fetch(`${url}member/getMember`, {
+      const response = await fetch($BASE_URL +"/member/getMember", {
         credentials: "include",
       });
 
@@ -65,7 +64,7 @@
         },
       };
 
-      const response = await fetch(url + "member/updateAddress", {
+      const response = await fetch($BASE_URL + "/member/updateAddress", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
