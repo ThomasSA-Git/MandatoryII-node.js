@@ -45,6 +45,7 @@
 <h2>List of members</h2>
 
 {#each members as member}
+<hr>
   <p><strong>Username: </strong>{member.username}</p>
   <p><strong>Email: </strong>{member.email}</p>
   <p><strong>Role: </strong>{member.role}</p>

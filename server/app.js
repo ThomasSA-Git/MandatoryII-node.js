@@ -16,7 +16,6 @@ app.use(
   })
 );
 
-
 import rateLimit from "express-rate-limit";
 
 app.use(express.json());
@@ -63,9 +62,15 @@ app.use(memberRouter);
 import adminRouter from "./routers/adminRouter.js";
 app.use(adminRouter);
 
-// Used for creating an admin user on start up
-/*   import { createAdminUser } from "./db/mongoDb.js";
-  await createAdminUser(); */
+// Used for creating an admin user on start up. Only for making it easier.
+// If deployed it wouldnt be added here, and password would be set beforehand
+// in .env.
+import { createAdminUser, findUserByUsername } from "./db/mongoDb.js";
+import { hashPassword } from "./util/bcrypt.js";
+if (!findUserByUsername("admin")) {
+  const adminPassword = hashPassword("admin")
+  await createAdminUser(adminPassword);
+}
 
 const PORT = process.env.PORT || 8080;
 

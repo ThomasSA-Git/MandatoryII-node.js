@@ -67,7 +67,7 @@ const findAllUsers = async () => {
   }
 };
 
-const createAdminUser = async () => {
+const createAdminUser = async (password) => {
   try {
     await connectToDatabase();
     const db = client.db("Mandatory");
@@ -76,7 +76,7 @@ const createAdminUser = async () => {
     const user = {
       username: "admin",
       email: "admin@admin",
-      password: process.env.ADMIN_PASSWORD,
+      password: password,
       role: "admin",
     };
 

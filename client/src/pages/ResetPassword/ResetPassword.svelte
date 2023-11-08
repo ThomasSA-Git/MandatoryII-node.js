@@ -129,7 +129,7 @@
 <div class="container">
   <div class="column">
 <h2>Get token for reset</h2>
-<p>Secret token will be sent to your mail.</p>
+<p>Secret token will be sent to your mail. It will be active for 30min.</p>
 
 <form on:submit|preventDefault={handleGetSecretToken}>
   <label for="usernameforreset">Username:</label>
@@ -139,7 +139,7 @@
 </form>
 </div>
 <div class="column">
-<h2>Input username and secret token to reset password</h2>
+<h2>Input username and secret token to reset password.</h2>
 <form on:submit|preventDefault={handleReset}>
   <label for="username">Username:</label>
   <input type="text" id="username" bind:value={username} />
@@ -147,7 +147,7 @@
   <label for="secretToken">Secret token:</label>
   <input type="text" id="secretToken" bind:value={secretToken} />
 
-  <label for="newPassword">Password:</label>
+  <label for="newPassword">New password:</label>
   <input type="password" id="newPassword" bind:value={newPassword} />
 
   <button type="submit">Reset password</button>

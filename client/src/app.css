@@ -150,10 +150,17 @@ button:hover {
 .column {
   flex: 1; /* Adjust the width as needed */
   margin: 8px; /* Adjust margin between columns */
-}
-
-/* Optional: Add a border to visualize columns */
-.column {
   border: 1px solid #ccc;
   padding: 16px;
+}
+
+div.container {
+  margin-top: -10px;
+  text-align: center;
+  justify-content: center;
+}
+
+ul.homeUL {
+  display: inline-block;
+  text-align: left;
 }
