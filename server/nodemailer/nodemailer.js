@@ -1,7 +1,5 @@
 import nodemailer from "nodemailer";
 
-/* import dotenv from "dotenv"; */
-
 
 export async function sendFakeEmail(userEmail, subject, message) {
     // Create a test account using ehereal
@@ -20,7 +18,7 @@ export async function sendFakeEmail(userEmail, subject, message) {
   
     // Setup email data
     const mailOptions = {
-      from: 'your_email@gmail.com',
+      from: 'my_service_mail_for_mandatoryII@gmail.com',
       to: userEmail,
       subject: subject,
       text: message

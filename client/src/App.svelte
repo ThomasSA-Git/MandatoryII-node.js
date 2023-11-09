@@ -11,25 +11,24 @@
   import { url } from "./util/apiUrl";
   import ResetPassword from "./pages/ResetPassword/ResetPassword.svelte";
 
-  import { onMount } from 'svelte';
+  import { onMount } from "svelte";
 
+  onMount(() => {
+    // Check for user in localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
+      user.set(userData.username);
+      role.set(userData.role);
+    }
+  });
 
-onMount(() => {
-  // Check for user in localStorage
-  const storedUser = localStorage.getItem('user');
-  if (storedUser) {
-    const userData = JSON.parse(storedUser);
-    user.set(userData.username);
-    role.set(userData.role);
-  }
-});
-
-   let showDropdown = false;
+  let showDropdown = false;
 
   async function handleLogout() {
-      await fetch(url + "auth/logout", {
-        credentials: "include",
-      });
+    await fetch(url + "auth/logout", {
+      credentials: "include",
+    });
     $user = null;
     localStorage.clear();
   }
@@ -44,14 +43,8 @@ onMount(() => {
     <Link to="/">Home</Link>
 
     {#if $user == null}
-      <div class="dropdown" on:click={toggleDropdown}>
-        <span>Login options</span>
-        <div class="dropdown-content">
-          <Link to="/login">Login</Link><br />
-          <Link to="/signup">Signup</Link><br />
-          <Link to="/resetpassword">Reset password</Link>
-        </div>
-      </div>
+      <Link to="/login">Login</Link><br />
+      <Link to="/signup">Signup</Link><br />
     {/if}
 
     <Link to="/contact">Contact</Link>

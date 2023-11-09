@@ -33,5 +33,5 @@
   DB.
   <br />
   There's a page for members (user and admin both) where address can be added and
-  there's a admin page that gives you an overview of all users in db.
+  there's a admin page that gives you an overview of all users in db. You can access reset password through the login page.
 </p>

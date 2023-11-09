@@ -33,7 +33,7 @@
         localStorage.setItem("user", JSON.stringify(userData));
 
         addToast({
-          message: "Login successful. Redirecting.",
+          message: "Login successful. Redirecting to member page.",
           type: "success",
           dismissible,
           timeout,
@@ -64,7 +64,7 @@
       }
     } catch (error) {
       console.log(error);
-      // make toast for the below as well
+      
       addToast({
         message: error,
         type: "error",

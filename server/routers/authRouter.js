@@ -71,8 +71,7 @@ router.post("/api/auth/register", async (req, res) => {
     const mailMessage = registerMailMessage(username);
     sendFakeEmail(email, registerMailSubject, mailMessage);
 
-    // Message not necessary
-    res.json({ message: "Registration successful." });
+    res.json({ message: "Registration successful. Redirecting to login." });
   }
 });
 
